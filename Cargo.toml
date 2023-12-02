@@ -6,3 +6,20 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+regex = "1.10.2"
+# colored = "2.0.4"
+# itertools = "0.10.0"
+# tracing = "0.1.40"
+# tracing-subscriber = "0.3.18"
+# thiserror = "1.0.50"
+
+# tracy-client
+# flamegraph
+# meitte
+# glam
+# nom
+# petgraph
+# rayon
+# dhat
+# divan
+# rstest
