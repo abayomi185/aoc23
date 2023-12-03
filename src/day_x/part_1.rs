@@ -24,6 +24,6 @@ mod tests {
         // let input = include_str!("./input.txt");
         //
         // let result = part_1(input);
-        print_green(&format!("Day X result: {}", 0));
+        print_green(&format!("Day X, part 1 result: {}", 0));
     }
 }
