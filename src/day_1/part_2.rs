@@ -82,6 +82,6 @@ zoneight234
         let input = include_str!("./input.txt");
 
         let result = part_2(input);
-        print_green(&format!("Day 2 result: {result}"));
+        print_green(&format!("Day 2, part 2 result: {result}"));
     }
 }

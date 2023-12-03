@@ -52,6 +52,6 @@ treb7uchet
         let input = include_str!("./input.txt");
 
         let result = part_1(input);
-        print_green(&format!("Day 1 result: {result}"));
+        print_green(&format!("Day 1, part 1 result: {result}"));
     }
 }
