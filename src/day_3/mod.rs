@@ -1,6 +1,6 @@
 /**
-* Advent of code 2023, Day X: ---
-* https://adventofcode.com/2023/day/2
+* Advent of code 2023, Day 3: Gear Ratios
+* https://adventofcode.com/2023/day/3
 */
 mod part_1;
 mod part_2;
