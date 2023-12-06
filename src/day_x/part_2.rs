@@ -21,9 +21,9 @@ mod tests {
 
     #[test]
     fn run_part_2() {
-        // let input = include_str!("./input.txt");
-        //
-        // let result = part_2(input);
-        print_green(&format!("Day X, part 2 result: {}", 0));
+        let input = include_str!("./input.txt");
+
+        let result = part_2(input);
+        print_green(&format!("Day X, part 2 result: {}", result));
     }
 }
