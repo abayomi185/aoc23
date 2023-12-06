@@ -4,12 +4,14 @@
 use std::collections::HashSet;
 
 use indexmap::IndexMap;
+use rayon::prelude::*;
 use regex::Regex;
 
+#[derive(Clone)]
 pub struct Mapping {
-    dest_start: i64,
-    source_start: i64,
-    length: i64,
+    pub dest_start: i64,
+    pub source_start: i64,
+    pub length: i64,
 }
 
 pub fn generate_maps(sections: Vec<&str>) -> IndexMap<&str, Vec<Mapping>> {
@@ -48,34 +50,31 @@ pub fn generate_maps(sections: Vec<&str>) -> IndexMap<&str, Vec<Mapping>> {
 
 pub fn generate_map_paths<T>(seeds: T, all_maps: IndexMap<&str, Vec<Mapping>>) -> Vec<Vec<i64>>
 where
-    T: IntoIterator<Item = i64>,
+    T: IntoParallelIterator<Item = i64>,
 {
-    let mut all_seed_map_path: Vec<Vec<i64>> = Vec::new();
+    seeds
+        .into_par_iter() // Changed to parallel iterator
+        .map(|seed| {
+            let mut seed_map_path: Vec<i64> = Vec::from([seed]);
 
-    for seed in seeds {
-        let mut seed_map_path: Vec<i64> = Vec::from([seed]);
+            for map in all_maps.keys() {
+                if let Some(last_val) = seed_map_path.last() {
+                    let val_from_map = all_maps
+                        .get(map)
+                        .unwrap()
+                        .iter()
+                        .filter(|m| (m.source_start..m.source_start + m.length).contains(last_val))
+                        .map(|m| m.dest_start + (last_val - m.source_start))
+                        .next(); // We only care about the first value
 
-        for map in all_maps.keys() {
-            if let Some(last_val) = seed_map_path.last() {
-                let val_from_map = all_maps
-                    .get(map)
-                    .unwrap()
-                    .iter()
-                    .filter(|m| (m.source_start..m.source_start + m.length).contains(last_val))
-                    .map(|m| m.dest_start + (last_val - m.source_start))
-                    .collect::<Vec<i64>>();
-
-                if let Some(val_from_map) = val_from_map.first() {
-                    seed_map_path.push(*val_from_map);
-                } else {
-                    seed_map_path.push(*last_val);
+                    if let Some(val_from_map) = val_from_map {
+                        seed_map_path.push(val_from_map);
+                    }
                 }
             }
-        }
-
-        all_seed_map_path.push(seed_map_path)
-    }
-    all_seed_map_path
+            seed_map_path
+        })
+        .collect() // This will collect the results into a Vec<Vec<i64>>
 }
 
 #[allow(dead_code)]
