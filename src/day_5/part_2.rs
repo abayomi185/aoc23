@@ -1,6 +1,37 @@
+use indexmap::IndexMap;
+use rayon::prelude::*;
 use regex::Regex;
 
-use super::part_1::{generate_map_paths, generate_maps};
+use super::part_1::{generate_maps, Mapping};
+
+pub fn generate_map_paths_2<T>(seeds: T, all_maps: &IndexMap<&str, Vec<Mapping>>) -> i64
+where
+    T: IntoIterator<Item = i64>,
+{
+    let mut lowest_value = i64::MAX;
+
+    for seed in seeds {
+        let mut last_value = seed;
+
+        for map in all_maps.keys() {
+            let val_from_map = all_maps
+                .get(map)
+                .unwrap()
+                .iter()
+                .filter(|m| (m.source_start..m.source_start + m.length).contains(&last_value))
+                .map(|m| m.dest_start + (last_value - m.source_start))
+                .collect::<Vec<i64>>();
+
+            if let Some(val_from_map) = val_from_map.first() {
+                last_value = *val_from_map;
+            }
+        }
+        if last_value < lowest_value {
+            lowest_value = last_value;
+        }
+    }
+    lowest_value
+}
 
 #[allow(dead_code)]
 fn part_2(input: &str) -> i64 {
@@ -9,24 +40,32 @@ fn part_2(input: &str) -> i64 {
     let seeds = Regex::new(r"\d+\s+\d+")
         .unwrap()
         .find_iter(sections[0])
-        .flat_map(|m| {
+        .map(|m| {
             let parts = m.as_str().split_whitespace().collect::<Vec<_>>();
             let start = parts[0].parse::<i64>().unwrap();
             let length = parts[1].parse::<i64>().unwrap();
-            (start..start + length).collect::<Vec<i64>>() // Use inclusive range and collect to Vec<i64>
+            start..start + length
         })
-        .collect::<Vec<i64>>();
+        .collect::<Vec<_>>();
+
+    // let seed_mins = seeds.iter().map(|s| s.start).collect::<Vec<_>>();
+    // let seed_maxs = seeds.iter().map(|s| s.end).collect::<Vec<_>>();
 
     let all_maps = generate_maps(sections);
 
-    let all_seed_map_path = generate_map_paths(seeds, all_maps);
-
-    all_seed_map_path
+    let min_value: i64 = seeds
+        .par_iter()
+        .map(|seeds_slice| {
+            let range = seeds_slice.clone().collect::<Vec<i64>>();
+            generate_map_paths_2(range, &all_maps)
+        })
+        .collect::<Vec<i64>>()
         .iter()
-        .map(|seed_map_path| seed_map_path.last().unwrap())
         .min()
         .copied()
-        .unwrap()
+        .unwrap();
+
+    min_value
 }
 
 #[cfg(test)]
