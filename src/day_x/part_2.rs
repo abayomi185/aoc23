@@ -8,6 +8,7 @@ fn part_2(input: &str) -> i32 {
 mod tests {
     use super::*;
     use crate::util::print_green;
+    use std::path::Path;
 
     #[test]
     fn test_part_2() {
@@ -24,6 +25,25 @@ mod tests {
         let input = include_str!("./input.txt");
 
         let result = part_2(input);
-        print_green(&format!("Day X, part 2 result: {}", result));
+
+        let file_name = file!();
+        let file_path = Path::new(file_name);
+        let file_name = file_path
+            .file_name()
+            .unwrap()
+            .to_str()
+            .unwrap()
+            .split('.')
+            .next()
+            .unwrap();
+
+        let mut dir_name: &str = "";
+
+        if let Some(dir) = file_path.parent() {
+            dir_name = dir.to_str().unwrap();
+            dir_name = dir_name.split('/').last().unwrap();
+        }
+
+        print_green(&format!("{dir_name}, {file_name} result: {}", result));
     }
 }
