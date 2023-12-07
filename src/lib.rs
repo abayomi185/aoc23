@@ -5,7 +5,7 @@ mod day_2; // Cube Conundrum
 mod day_3; // Gear Ratios
 mod day_4; // Scratchcards
 mod day_5; // If You Give A Seed A Fertilizer
-           // mod day_6;
+mod day_6; // Wait For It
            // mod day_7;
            // mod day_8;
            // mod day_9;
