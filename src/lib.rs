@@ -7,7 +7,7 @@ mod day_4; // Scratchcards
 mod day_5; // If You Give A Seed A Fertilizer
 mod day_6; // Wait For It
 mod day_7; // Camel Cards
-           // mod day_8;
+mod day_8; // Haunted Wasteland
            // mod day_9;
            //
            // mod day_10;
