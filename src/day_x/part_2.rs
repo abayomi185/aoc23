@@ -1,5 +1,5 @@
 #[allow(dead_code)]
-fn part_2(input: &str) -> i32 {
+fn part_2(input: &str) -> i64 {
     let _placeholder = input;
     0
 }
