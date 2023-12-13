@@ -12,7 +12,7 @@ mod day_9; // Mirage Maintenance
 
 mod day_10; // Pipe Maze
 mod day_11; // Cosmic Expansion
-            // mod day_12;
+mod day_12; // Hot Springs
             // mod day_13;
             // mod day_14;
             // mod day_15;
